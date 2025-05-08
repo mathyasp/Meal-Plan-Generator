@@ -1,12 +1,37 @@
-# React + Vite
+# Meal Plan Generator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered meal planning application that helps users generate personalized meal plans based on their available ingredients, preferences, and desired themes.
 
-Currently, two official plugins are available:
+## Project Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This application allows users to:
+- Input their available ingredients
+- Specify dietary preferences
+- Choose a cuisine theme
+- Set a timeline (1-7 days)
+- Generate a personalized meal plan
 
-## Expanding the ESLint configuration
+## Goals
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Create a user-friendly interface for meal planning
+- Integrate with AI for intelligent meal suggestions
+- Provide flexible and customizable meal plans
+- Help users make the most of their available ingredients
+
+## AI Usage
+
+This project uses AI in the following ways:
+- LLM integration for generating meal plans based on user inputs
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
+
+## Tech Stack
+
+- React
+- Redux Toolkit
+- Vite
+- External API integration (to be implemented)
