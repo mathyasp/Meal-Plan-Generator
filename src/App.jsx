@@ -1,5 +1,6 @@
 import './App.css'
 import MealPlanForm from './components/MealPlanForm'
+import MealPlanDisplay from './components/MealPlanDisplay'
 import DebugPanel from './components/DebugPanel'
 
 function App() {
@@ -9,12 +10,7 @@ function App() {
       <p>Generate personalized meal plans based on your ingredients and preferences</p>
       
       <MealPlanForm />
-      
-      <div>
-        <h2>Your Meal Plan</h2>
-        <p>Your generated meal plan will appear here</p>
-      </div>
-
+      <MealPlanDisplay />
       <DebugPanel />
     </div>
   )
