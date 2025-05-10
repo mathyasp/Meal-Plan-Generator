@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFormData, setError } from '../store/mealPlanSlice'
+import { updateFormData, setError, fetchMealPlan } from '../store/mealPlanSlice'
 
 function MealPlanForm() {
   const dispatch = useDispatch()
   const formData = useSelector(state => state.mealPlan.formData)
   const errors = useSelector(state => state.mealPlan.errors)
+  const isLoading = useSelector(state => state.mealPlan.isLoading)
+  const error = useSelector(state => state.mealPlan.error)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -34,13 +36,8 @@ function MealPlanForm() {
       return
     }
 
-    // Temporary to confirm form data
-    console.log('Form submitted:', JSON.stringify({
-      ingredients: formData.ingredients,
-      timeline: formData.timeline,
-      preferences: formData.preferences,
-      theme: formData.theme
-    }, null, 2))
+    // Use dispactch to generate meal plan
+    dispatch(fetchMealPlan(formData))
   }
 
   return (
@@ -99,7 +96,11 @@ function MealPlanForm() {
         {errors.theme && <div className="error">{errors.theme}</div>}
       </div>
 
-      <button type="submit">Generate Meal Plan</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Generating...' : 'Generate Meal Plan'}
+      </button>
+
+      {error && <div className="error">Error: {error}</div>}
     </form>
   )
 }

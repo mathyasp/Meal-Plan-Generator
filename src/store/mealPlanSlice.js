@@ -1,4 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { generateMealPlan } from '../api/mealPlanApi'
+
+// Create the async thunk
+export const fetchMealPlan = createAsyncThunk(
+  'mealPlan/fetchMealPlan',
+  async (formData) => {
+    const response = await generateMealPlan(formData)
+    return response
+  }
+)
 
 const initialState = {
   formData: {
@@ -12,26 +22,41 @@ const initialState = {
     timeline: '',
     theme: ''
   },
-  mealPlan: null
+  meals: [],
+  isLoading: false,
+  error: null
 }
 
-export const mealPlanSlice = createSlice({
+const mealPlanSlice = createSlice({
   name: 'mealPlan',
   initialState,
   reducers: {
     updateFormData: (state, action) => {
-      state.formData = {
-        ...state.formData,
-        ...action.payload
-      }
+      state.formData = { ...state.formData, ...action.payload }
     },
     setError: (state, action) => {
-      state.errors[action.payload.field] = action.payload.message
+      const { field, message } = action.payload
+      state.errors[field] = message
     },
     clearForm: (state) => {
       state.formData = initialState.formData
       state.errors = initialState.errors
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchMealPlan.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(fetchMealPlan.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.meals = action.payload.meals
+      })
+      .addCase(fetchMealPlan.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.error.message
+      })
   }
 })
 
