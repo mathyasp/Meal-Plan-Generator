@@ -8,7 +8,9 @@ function MealPlanForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    dispatch(updateFormData({ [name]: value }))
+    // Convert timeline to number, keep other values as strings
+    const newValue = name === 'timeline' ? Number(value) : value
+    dispatch(updateFormData({ [name]: newValue }))
   }
 
   const handleSubmit = (e) => {
@@ -33,7 +35,12 @@ function MealPlanForm() {
     }
 
     // Temporary to confirm form data
-    console.log('Form submitted:', formData)
+    console.log('Form submitted:', JSON.stringify({
+      ingredients: formData.ingredients,
+      timeline: formData.timeline,
+      preferences: formData.preferences,
+      theme: formData.theme
+    }, null, 2))
   }
 
   return (
