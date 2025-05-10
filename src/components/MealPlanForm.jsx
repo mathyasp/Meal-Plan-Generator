@@ -1,19 +1,13 @@
-import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateFormData } from '../store/mealPlanSlice'
 
 function MealPlanForm() {
-  const [formData, setFormData] = useState({
-    ingredients: '',
-    timeline: 1,
-    preferences: '',
-    theme: ''
-  })
+  const dispatch = useDispatch()
+  const formData = useSelector(state => state.mealPlan.formData)
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }))
+    dispatch(updateFormData({ [name]: value }))
   }
 
   const handleSubmit = (e) => {
