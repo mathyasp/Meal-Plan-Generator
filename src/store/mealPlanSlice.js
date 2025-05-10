@@ -7,9 +7,12 @@ const initialState = {
     preferences: '',
     theme: ''
   },
-  mealPlan: null,
-  isLoading: false,
-  error: null
+  errors: {
+    ingredients: '',
+    timeline: '',
+    theme: ''
+  },
+  mealPlan: null
 }
 
 export const mealPlanSlice = createSlice({
@@ -22,11 +25,15 @@ export const mealPlanSlice = createSlice({
         ...action.payload
       }
     },
+    setError: (state, action) => {
+      state.errors[action.payload.field] = action.payload.message
+    },
     clearForm: (state) => {
       state.formData = initialState.formData
+      state.errors = initialState.errors
     }
   }
 })
 
-export const { updateFormData, clearForm } = mealPlanSlice.actions
+export const { updateFormData, setError, clearForm } = mealPlanSlice.actions
 export default mealPlanSlice.reducer 

@@ -1,9 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { updateFormData } from '../store/mealPlanSlice'
+import { updateFormData, setError } from '../store/mealPlanSlice'
 
 function MealPlanForm() {
   const dispatch = useDispatch()
   const formData = useSelector(state => state.mealPlan.formData)
+  const errors = useSelector(state => state.mealPlan.errors)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -12,7 +13,26 @@ function MealPlanForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // TODO: Handle form submission
+    
+    // Check if ingredients are empty
+    if (!formData.ingredients) {
+      dispatch(setError({ field: 'ingredients', message: 'Please add some ingredients' }))
+      return
+    }
+
+    // Check if timeline is valid
+    if (formData.timeline < 1 || formData.timeline > 7) {
+      dispatch(setError({ field: 'timeline', message: 'Pick between 1 and 7 days' }))
+      return
+    }
+
+    // Check if theme is empty
+    if (!formData.theme) {
+      dispatch(setError({ field: 'theme', message: 'Please pick a cuisine theme' }))
+      return
+    }
+
+    // Temporary to confirm form data
     console.log('Form submitted:', formData)
   }
 
@@ -28,6 +48,7 @@ function MealPlanForm() {
           placeholder="List your available ingredients..."
         />
         <small>Enter ingredients separated by commas (e.g., chicken, rice, tomatoes)</small>
+        {errors.ingredients && <div className="error">{errors.ingredients}</div>}
       </div>
 
       <div>
@@ -41,6 +62,7 @@ function MealPlanForm() {
           value={formData.timeline}
           onChange={handleChange}
         />
+        {errors.timeline && <div className="error">{errors.timeline}</div>}
       </div>
 
       <div>
@@ -67,6 +89,7 @@ function MealPlanForm() {
           placeholder="e.g., Italian, Japanese"
         />
         <small>Enter a cuisine type or theme for your meals</small>
+        {errors.theme && <div className="error">{errors.theme}</div>}
       </div>
 
       <button type="submit">Generate Meal Plan</button>
