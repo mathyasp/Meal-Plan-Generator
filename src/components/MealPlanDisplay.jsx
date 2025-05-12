@@ -3,26 +3,58 @@ import { useSelector } from 'react-redux'
 function MealPlanDisplay() {
   const meals = useSelector(state => state.mealPlan.meals)
   const isLoading = useSelector(state => state.mealPlan.isLoading)
+  const error = useSelector(state => state.mealPlan.error)
 
   if (isLoading) {
-    return <div>Loading your meal plan...</div>
+    return (
+      <div>
+        <div>Loading your meal plan...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>Error: {error}</p>
+        <p>Please try again</p>
+      </div>
+    )
   }
 
   if (meals.length === 0) {
-    return <div>Fill out the form to generate a meal plan</div>
+    return (
+      <div>
+        <p>Fill out the form to generate your meal plan</p>
+        <p>We'll create a personalized plan based on your preferences</p>
+      </div>
+    )
   }
 
   return (
     <div>
       <h2>Your Meal Plan</h2>
-      {meals.map(meal => (
-        <div key={meal.day}>
-          <h3>Day {meal.day}</h3>
-          <p>Breakfast: {meal.breakfast}</p>
-          <p>Lunch: {meal.lunch}</p>
-          <p>Dinner: {meal.dinner}</p>
-        </div>
-      ))}
+      <div>
+        {meals.map(meal => (
+          <div key={meal.day}>
+            <h3>Day {meal.day}</h3>
+            <div>
+              <div>
+                <h4>Breakfast</h4>
+                <p>{meal.breakfast}</p>
+              </div>
+              <div>
+                <h4>Lunch</h4>
+                <p>{meal.lunch}</p>
+              </div>
+              <div>
+                <h4>Dinner</h4>
+                <p>{meal.dinner}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

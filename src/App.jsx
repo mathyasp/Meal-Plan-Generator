@@ -1,19 +1,25 @@
-import './App.css'
+import { Provider } from 'react-redux'
+import { store } from './store'
 import MealPlanForm from './components/MealPlanForm'
 import MealPlanDisplay from './components/MealPlanDisplay'
-import DebugPanel from './components/DebugPanel'
+import './App.css'
 
 function App() {
   return (
-    <div>
-      <h1>Meal Plan Generator</h1>
-      <p>Generate personalized meal plans based on your ingredients and preferences</p>
-      
-      <MealPlanForm />
-      <MealPlanDisplay />
-      <DebugPanel />
-    </div>
+    <Provider store={store}>
+      <div>
+        <header>
+          <div>
+            <h1>AI Meal Plan Generator</h1>
+          </div>
+        </header>
+        <main>
+          <MealPlanForm />
+          <MealPlanDisplay />
+        </main>
+      </div>
+    </Provider>
   )
 }
 
-export default App;
+export default App
