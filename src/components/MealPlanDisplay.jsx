@@ -1,9 +1,25 @@
 import { useSelector } from 'react-redux'
+import { useState } from 'react'
 
 function MealPlanDisplay() {
   const meals = useSelector(state => state.mealPlan.meals)
   const isLoading = useSelector(state => state.mealPlan.isLoading)
   const error = useSelector(state => state.mealPlan.error)
+  const [saveMessage, setSaveMessage] = useState('')
+
+  const handleSavePlan = () => {
+    const planData = {
+      date: new Date().toISOString(),
+      meals: meals
+    }
+    localStorage.setItem('savedMealPlan', JSON.stringify(planData))
+    setSaveMessage('Meal plan saved!')
+    setTimeout(() => setSaveMessage(''), 3000)
+  }
+
+  const handlePrintPlan = () => {
+    window.print()
+  }
 
   if (isLoading) {
     return (
@@ -34,6 +50,11 @@ function MealPlanDisplay() {
   return (
     <div>
       <h2>Your Meal Plan</h2>
+      <div>
+        <button onClick={handleSavePlan}>Save Plan</button>
+        <button onClick={handlePrintPlan}>Print Plan</button>
+      </div>
+      {saveMessage && <p>{saveMessage}</p>}
       <div>
         {meals.map(meal => (
           <div key={meal.day}>

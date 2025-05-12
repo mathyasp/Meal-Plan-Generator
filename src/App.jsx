@@ -2,6 +2,7 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 import MealPlanForm from './components/MealPlanForm'
 import MealPlanDisplay from './components/MealPlanDisplay'
+import SavedPlans from './components/SavedPlans'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <main>
           <MealPlanForm />
           <MealPlanDisplay />
+          <SavedPlans />
         </main>
       </div>
     </Provider>
