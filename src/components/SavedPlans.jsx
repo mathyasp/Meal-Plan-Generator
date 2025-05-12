@@ -2,46 +2,84 @@ import { useNavigate } from 'react-router-dom'
 
 function SavedPlans() {
   const navigate = useNavigate()
-  
-  const savedPlan = localStorage.getItem('savedMealPlan')
-  const planData = savedPlan ? JSON.parse(savedPlan) : null
+  const savedPlan = JSON.parse(localStorage.getItem('savedMealPlan'))
+
+  const handleBack = () => {
+    navigate('/')
+  }
+
+  if (!savedPlan) {
+    return (
+      <div>
+        <h2>No Saved Plan</h2>
+        <p>You haven't saved any meal plans yet.</p>
+        <button onClick={handleBack}>Back to Meal Planner</button>
+      </div>
+    )
+  }
 
   return (
     <div>
+      <h2>Saved Meal Plan</h2>
+      <p>Saved on: {new Date(savedPlan.date).toLocaleDateString()}</p>
       <div>
-        <button onClick={() => navigate('/')}>Back to Meal Plan</button>
-      </div>
-      
-      <h1>Saved Meal Plan</h1>
-      
-      {planData ? (
-        <div>
-          <p>Saved on: {new Date(planData.date).toLocaleDateString()}</p>
-          <div>
-            {planData.meals.map(meal => (
-              <div key={meal.day}>
-                <h2>Day {meal.day}</h2>
+        {savedPlan.meals.map(meal => (
+          <div key={meal.day}>
+            <h3>Day {meal.day}</h3>
+            <div>
+              {meal.breakfast && meal.breakfast.name && (
                 <div>
-                  <div>
-                    <h3>Breakfast</h3>
-                    <p>{meal.breakfast}</p>
-                  </div>
-                  <div>
-                    <h3>Lunch</h3>
-                    <p>{meal.lunch}</p>
-                  </div>
-                  <div>
-                    <h3>Dinner</h3>
-                    <p>{meal.dinner}</p>
-                  </div>
+                  <h4>Breakfast</h4>
+                  <p>{meal.breakfast.name}</p>
+                  {meal.breakfast.ingredients && meal.breakfast.ingredients.length > 0 && (
+                    <div>
+                      <h5>Ingredients:</h5>
+                      <ul>
+                        {meal.breakfast.ingredients.map((ingredient, index) => (
+                          <li key={index}>{ingredient}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              )}
+              {meal.lunch && meal.lunch.name && (
+                <div>
+                  <h4>Lunch</h4>
+                  <p>{meal.lunch.name}</p>
+                  {meal.lunch.ingredients && meal.lunch.ingredients.length > 0 && (
+                    <div>
+                      <h5>Ingredients:</h5>
+                      <ul>
+                        {meal.lunch.ingredients.map((ingredient, index) => (
+                          <li key={index}>{ingredient}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+              {meal.dinner && meal.dinner.name && (
+                <div>
+                  <h4>Dinner</h4>
+                  <p>{meal.dinner.name}</p>
+                  {meal.dinner.ingredients && meal.dinner.ingredients.length > 0 && (
+                    <div>
+                      <h5>Ingredients:</h5>
+                      <ul>
+                        {meal.dinner.ingredients.map((ingredient, index) => (
+                          <li key={index}>{ingredient}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      ) : (
-        <p>No saved meal plan found</p>
-      )}
+        ))}
+      </div>
+      <button onClick={handleBack}>Back to Meal Planner</button>
     </div>
   )
 }
