@@ -2,15 +2,51 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Print styles */
+@media print {
+  /* Hide navigation and other UI elements */
+  header, 
+  form,
+  button,
+  nav,
+  .print-controls {
+    display: none !important;
+  }
+
+  /* Ensure content fits on page */
+  body {
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Add page breaks between days */
+  .print-view > div > div {
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+}
+
+/* Basic print view layout */
+.print-view {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.print-controls {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.print-controls button {
+  margin: 0 5px;
 }
 

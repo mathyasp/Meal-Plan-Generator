@@ -1,11 +1,13 @@
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function MealPlanDisplay() {
   const meals = useSelector(state => state.mealPlan.meals)
   const isLoading = useSelector(state => state.mealPlan.isLoading)
   const error = useSelector(state => state.mealPlan.error)
   const [saveMessage, setSaveMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleSavePlan = () => {
     const planData = {
@@ -18,7 +20,7 @@ function MealPlanDisplay() {
   }
 
   const handlePrintPlan = () => {
-    window.print()
+    navigate('/print')
   }
 
   if (isLoading) {
