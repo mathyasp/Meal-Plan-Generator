@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import MealPlanForm from './components/MealPlanForm'
 import MealPlanDisplay from './components/MealPlanDisplay'
 import PrintView from './components/PrintView'
+import SavedPlans from './components/SavedPlans'
 import './App.css'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/print" element={<PrintView />} />
+          <Route path="/saved" element={<SavedPlans />} />
           <Route path="/" element={
             <div>
               <header>

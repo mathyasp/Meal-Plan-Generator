@@ -1,12 +1,10 @@
 import { useSelector } from 'react-redux'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function MealPlanDisplay() {
   const meals = useSelector(state => state.mealPlan.meals)
   const isLoading = useSelector(state => state.mealPlan.isLoading)
   const error = useSelector(state => state.mealPlan.error)
-  const [saveMessage, setSaveMessage] = useState('')
   const navigate = useNavigate()
 
   const handleSavePlan = () => {
@@ -15,12 +13,15 @@ function MealPlanDisplay() {
       meals: meals
     }
     localStorage.setItem('savedMealPlan', JSON.stringify(planData))
-    setSaveMessage('Meal plan saved!')
-    setTimeout(() => setSaveMessage(''), 3000)
+    navigate('/saved')
   }
 
   const handlePrintPlan = () => {
     navigate('/print')
+  }
+
+  const handleViewSaved = () => {
+    navigate('/saved')
   }
 
   if (isLoading) {
@@ -45,6 +46,7 @@ function MealPlanDisplay() {
       <div>
         <p>Fill out the form to generate your meal plan</p>
         <p>We'll create a personalized plan based on your preferences</p>
+        <button onClick={handleViewSaved}>View Saved Plan</button>
       </div>
     )
   }
@@ -55,8 +57,8 @@ function MealPlanDisplay() {
       <div>
         <button onClick={handleSavePlan}>Save Plan</button>
         <button onClick={handlePrintPlan}>Print Plan</button>
+        <button onClick={handleViewSaved}>View Saved Plan</button>
       </div>
-      {saveMessage && <p>{saveMessage}</p>}
       <div>
         {meals.map(meal => (
           <div key={meal.day}>
