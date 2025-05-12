@@ -1,106 +1,149 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { updateFormData, setError, fetchMealPlan } from '../store/mealPlanSlice'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { generateMealPlan } from '../store/mealPlanSlice'
 
 function MealPlanForm() {
   const dispatch = useDispatch()
-  const formData = useSelector(state => state.mealPlan.formData)
-  const errors = useSelector(state => state.mealPlan.errors)
-  const isLoading = useSelector(state => state.mealPlan.isLoading)
-  const error = useSelector(state => state.mealPlan.error)
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    // Convert timeline to number, keep other values as strings
-    const newValue = name === 'timeline' ? Number(value) : value
-    dispatch(updateFormData({ [name]: newValue }))
-  }
+  const [formData, setFormData] = useState({
+    days: 3,
+    dietaryRestrictions: '',
+    cuisine: '',
+    ingredients: '',
+    mode: 'new',
+    meals: {
+      breakfast: true,
+      lunch: true,
+      dinner: true
+    }
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    dispatch(generateMealPlan(formData))
+  }
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
     
-    // Check if ingredients are empty
-    if (!formData.ingredients) {
-      dispatch(setError({ field: 'ingredients', message: 'Please add some ingredients' }))
-      return
+    if (type === 'checkbox') {
+      setFormData(prev => ({
+        ...prev,
+        meals: {
+          ...prev.meals,
+          [name]: checked
+        }
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }))
     }
-
-    // Check if timeline is valid
-    if (formData.timeline < 1 || formData.timeline > 7) {
-      dispatch(setError({ field: 'timeline', message: 'Pick between 1 and 7 days' }))
-      return
-    }
-
-    // Check if theme is empty
-    if (!formData.theme) {
-      dispatch(setError({ field: 'theme', message: 'Please pick a cuisine theme' }))
-      return
-    }
-
-    // Use dispactch to generate meal plan
-    dispatch(fetchMealPlan(formData))
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="ingredients">Ingredients Available:</label>
-        <textarea
-          id="ingredients"
-          name="ingredients"
-          value={formData.ingredients}
-          onChange={handleChange}
-          placeholder="List your available ingredients..."
-        />
-        <small>Enter ingredients separated by commas (e.g., chicken, rice, tomatoes)</small>
-        {errors.ingredients && <div className="error">{errors.ingredients}</div>}
+        <label>
+          Plan Mode:
+          <select 
+            name="mode" 
+            value={formData.mode}
+            onChange={handleChange}
+          >
+            <option value="new">Generate New Plan</option>
+            <option value="ingredients">Use My Ingredients</option>
+          </select>
+        </label>
       </div>
 
       <div>
-        <label htmlFor="timeline">Number of Days (1-7):</label>
-        <input
-          type="number"
-          id="timeline"
-          name="timeline"
-          min="1"
-          max="7"
-          value={formData.timeline}
-          onChange={handleChange}
-        />
-        {errors.timeline && <div className="error">{errors.timeline}</div>}
+        <label>
+          Number of Days:
+          <input
+            type="number"
+            name="days"
+            value={formData.days}
+            onChange={handleChange}
+            min="1"
+            max="7"
+          />
+        </label>
       </div>
 
       <div>
-        <label htmlFor="preferences">Dietary Preferences:</label>
-        <input
-          type="text"
-          id="preferences"
-          name="preferences"
-          value={formData.preferences}
-          onChange={handleChange}
-          placeholder="e.g., vegetarian, gluten-free"
-        />
-        <small>Enter any dietary restrictions or preferences</small>
+        <p>Meals to Include:</p>
+        <label>
+          <input
+            type="checkbox"
+            name="breakfast"
+            checked={formData.meals.breakfast}
+            onChange={handleChange}
+          />
+          Breakfast
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            name="lunch"
+            checked={formData.meals.lunch}
+            onChange={handleChange}
+          />
+          Lunch
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            name="dinner"
+            checked={formData.meals.dinner}
+            onChange={handleChange}
+          />
+          Dinner
+        </label>
       </div>
 
       <div>
-        <label htmlFor="theme">Meal Theme:</label>
-        <input
-          type="text"
-          id="theme"
-          name="theme"
-          value={formData.theme}
-          onChange={handleChange}
-          placeholder="e.g., Italian, Japanese"
-        />
-        <small>Enter a cuisine type or theme for your meals</small>
-        {errors.theme && <div className="error">{errors.theme}</div>}
+        <label>
+          Dietary Restrictions (optional):
+          <input
+            type="text"
+            name="dietaryRestrictions"
+            value={formData.dietaryRestrictions}
+            onChange={handleChange}
+            placeholder="e.g., vegetarian, gluten-free"
+          />
+        </label>
       </div>
 
-      <button type="submit" disabled={isLoading}>
-        {isLoading ? 'Generating...' : 'Generate Meal Plan'}
-      </button>
+      <div>
+        <label>
+          Preferred Cuisine (optional):
+          <input
+            type="text"
+            name="cuisine"
+            value={formData.cuisine}
+            onChange={handleChange}
+            placeholder="e.g., Italian, Mexican, Asian fusion"
+          />
+        </label>
+      </div>
 
-      {error && <div className="error">Error: {error}</div>}
+      {formData.mode === 'ingredients' && (
+        <div>
+          <label>
+            Available Ingredients:
+            <textarea
+              name="ingredients"
+              value={formData.ingredients}
+              onChange={handleChange}
+              placeholder="List your ingredients, separated by commas"
+              rows="4"
+            />
+          </label>
+        </div>
+      )}
+
+      <button type="submit">Generate Meal Plan</button>
     </form>
   )
 }
