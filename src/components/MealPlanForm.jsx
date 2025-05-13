@@ -42,24 +42,27 @@ function MealPlanForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>
-          Plan Mode:
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 space-y-6">
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Plan Mode
+          </label>
           <select 
             name="mode" 
             value={formData.mode}
             onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md"
           >
             <option value="new">Generate New Plan</option>
             <option value="ingredients">Use My Ingredients</option>
           </select>
-        </label>
-      </div>
+        </div>
 
-      <div>
-        <label>
-          Number of Days:
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Number of Days
+          </label>
           <input
             type="number"
             name="days"
@@ -67,83 +70,81 @@ function MealPlanForm() {
             onChange={handleChange}
             min="1"
             max="7"
+            className="w-full p-2 border border-gray-300 rounded-md"
           />
-        </label>
-      </div>
+        </div>
 
-      <div>
-        <p>Meals to Include:</p>
-        <label>
-          <input
-            type="checkbox"
-            name="breakfast"
-            checked={formData.meals.breakfast}
-            onChange={handleChange}
-          />
-          Breakfast
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="lunch"
-            checked={formData.meals.lunch}
-            onChange={handleChange}
-          />
-          Lunch
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="dinner"
-            checked={formData.meals.dinner}
-            onChange={handleChange}
-          />
-          Dinner
-        </label>
-      </div>
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-2">Meals to Include</p>
+          <div className="space-y-2">
+            {['breakfast', 'lunch', 'dinner'].map((meal) => (
+              <label key={meal} className="inline-flex items-center mr-4">
+                <input
+                  type="checkbox"
+                  name={meal}
+                  checked={formData.meals[meal]}
+                  onChange={handleChange}
+                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <span className="ml-2 text-sm text-gray-700 capitalize">{meal}</span>
+              </label>
+            ))}
+          </div>
+        </div>
 
-      <div>
-        <label>
-          Dietary Restrictions (optional):
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Dietary Restrictions (optional)
+          </label>
           <input
             type="text"
             name="dietaryRestrictions"
             value={formData.dietaryRestrictions}
             onChange={handleChange}
             placeholder="e.g., vegetarian, gluten-free"
+            className="w-full p-2 border border-gray-300 rounded-md"
           />
-        </label>
-      </div>
+        </div>
 
-      <div>
-        <label>
-          Preferred Cuisine (optional):
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Preferred Cuisine (optional)
+          </label>
           <input
             type="text"
             name="cuisine"
             value={formData.cuisine}
             onChange={handleChange}
-            placeholder="e.g., Italian, Mexican, Asian fusion"
+            placeholder="e.g., Italian, Mexican, Japanese"
+            className="w-full p-2 border border-gray-300 rounded-md"
           />
-        </label>
-      </div>
+        </div>
 
-      {formData.mode === 'ingredients' && (
-        <div>
-          <label>
-            Available Ingredients:
+        {formData.mode === 'ingredients' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Available Ingredients
+            </label>
             <textarea
               name="ingredients"
               value={formData.ingredients}
               onChange={handleChange}
               placeholder="List your ingredients, separated by commas"
               rows="4"
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
-          </label>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
-      <button type="submit">Generate Meal Plan</button>
+      <div className="pt-4">
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+        >
+          Generate Meal Plan
+        </button>
+      </div>
     </form>
   )
 }
